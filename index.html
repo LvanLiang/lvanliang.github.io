@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://ky.gzsedu.cn/Admin/Login?ReturnUrl=%2fAdmin -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>梁效平测试</title>
+    
+    <script src="./js/jquery-1.8.2.min.js"></script>
+    <link href="./css/hedu.css" rel="stylesheet">
+    <script src="./js/MSClass.js"></script><style type="text/css" abt="234"></style>
+<script>//console.log('a')
+</script><script>//remove 17173 video ad
+doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+//remove baidu search ad
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+//remove sohu video ad
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//remove 56.com video ad
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//fore iqiyi enable html5 player function
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body>
+    <div id="login_top">
+        <div class="w1000" id="toplj">
+            <a href="">贵州教育网</a> | <a href="">贵州教育云平台</a>
+        </div>
+    </div>
+    <div class="w1000" id="logobox">
+        <img src="./images/logo.jpg">
+    </div>
+    <div id="slide_tab">
+        <div class="main" id="main1" style="margin: 0px auto; overflow: hidden; width: 1420px; height: 400px; position: relative;">
+            <ul id="content1" style="padding: 0px; border: 0px; font-size: 0px; line-height: 1.15; display: inline-block; margin: 0px; list-style: none; width: 5680px; height: 400px;">
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b01.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b02.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b03.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b04.jpg"></a></li>
+            </ul>
+        <div style="width: 1420px; height: 400px; position: absolute; left: 4260px; top: 0px; overflow: hidden; visibility: hidden; opacity: 0;">
+            <ul id="content1" style="padding: 0px; border: 0px; font-size: 0px; line-height: 1.15; display: inline-block; margin: 0px; list-style: none; width: 5680px; height: 400px;">
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b01.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b02.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b03.jpg"></a></li>
+                <li style="list-style: none; margin-left: 0px; margin-right: 0px; border-left-width: 0px; border-right-width: 0px; float: left; display: inline;"><a href="javascript:void(0)">
+                    <img width="1420" height="400" src="./images/b04.jpg"></a></li>
+            </ul>
+        </div></div>
+        <div id="tabbox">
+            <div id="mytabbox">
+                <ul id="myTab_btns1" style="padding: 0px; margin: 0px; list-style: none; font-size: 0px;">
+                    <li class="" style="font-size: 12px; overflow: hidden;">1</li>
+                    <li style="font-size: 12px; overflow: hidden;" class="">2</li>
+                    <li style="font-size: 12px; overflow: hidden;" class="">3</li>
+                    <li style="font-size: 12px; overflow: hidden;" class="active">4</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="w1000" id="myloginbox">
+        <div id="myloginbox1"></div>
+        <div id="myloginbox2">
+            <h2>管理系统登录</h2>
+            <ul id="logincontainer">
+                <li>
+                    <div class="sn01">账　号</div>
+                    <div class="sn02">
+                        <input type="text" id="UName" name="UName" style="width: 220px">
+                    </div>
+                </li>
+                <li>
+                    <div class="sn01">密　码</div>
+                    <div class="sn02">
+                        <input type="password" id="UPwd" name="UPwd" style="width: 220px">
+                    </div>
+                </li>
+                <li>
+                    <div class="sn01">验证码</div>
+                    <div class="sn03">
+                        <input type="text" id="VCode" name="VCode" style="width: 100px">
+                    </div>
+                    <div id="yzm">
+                        <img id="yzimg" src="./images/VCode" title="点击刷新" onclick="this.src+=&#39;?&#39;" width="100">
+                    </div>
+                </li>
+                <li>
+                    <a id="btnlogin" class="aSubmit">登录</a>
+                    <a id="wjpwd" href="">忘记登录密码</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="w1000" id="ghbox"></div>
+    <div class="w1000" id="shujvbox">
+        全省已有<span>84</span>家教育行政部门 ，<span>54</span>所高校，<span>3215</span>所中小学接入贵州教育云平台。
+    </div>
+    <div id="logind1">
+        <div class="w1000" id="yyy">
+            <dl>
+                <dt>教育行政部门</dt>
+                <dd><a href="">省教育厅公文传输管理系统</a></dd>
+                <dd><a href="">公文文号管理系统</a></dd>
+                <dd><a href="">自然科学研究项目管理系统</a></dd>
+                <dd><a href="">高校教改工程项目管理系统</a></dd>
+                <dd><a href="">国际事务管理数据库</a></dd>
+                <dd><a href="">特岗教师考试认证管理系统</a></dd>
+                <dd><a href="">......</a></dd>
+            </dl>
+            <dl>
+                <dt>贵州教育网群</dt>
+                <dd><a href="">贵州教育网群CMS建设系统</a></dd>
+                <dd><a href="">专题网站建设系统</a></dd>
+                <dd><a href="">网站数据流迁移软件</a></dd>
+                <dd><a href="">网群维护管理系统</a></dd>
+                <dd><a href="">信息报送管理系统</a></dd>
+                <dd><a href="">网群信息推送系统</a></dd>
+                <dd><a href="">......</a></dd>
+            </dl>
+            <dl>
+                <dt>教育教学</dt>
+                <dd><a href="">幼儿园新生报名系统</a></dd>
+                <dd><a href="">校长招聘报名管理系统</a></dd>
+                <dd><a href="">毕业生档案查询系统</a></dd>
+                <dd><a href="">教育资讯投稿系统</a></dd>
+                <dd><a href="">课程管理查询系统</a></dd>
+                <dd><a href="">学生成绩查询系统</a></dd>
+                <dd><a href="">......</a></dd>
+            </dl>
+        </div>
+    </div>
+    <div id="footerx">
+        <strong>贵州省教育厅</strong>  规划指导   <strong>贵州教育网</strong>  自主研发实施<br>
+        Copyright © 2005-2013 gzsedu.cn，All Rights Reserved，未经书面许可，不得以任何形式复制、镜像。
+    </div>
+    <script type="text/javascript">
+        new Marquee(
+        {
+            MSClassID: "main1",
+            ContentID: "content1",
+            TabID: "myTab_btns1",
+            Direction: 2,
+            Step: 0.1,
+            Width: 1420,
+            Height: 400,
+            Timer: 20,
+            DelayTime: 3000,
+            WaitTime: 0,
+            ScrollStep: 1420,
+            SwitchType: 2,
+            TabEvent: 'onclick',
+            AutoStart: 1
+        })
+
+        $(function () {
+            $("#vImg").attr("src", "/admin/VCode?t=" + Math.random());
+            $("#vImg").click(function () {
+                $(this).attr("src", "/admin/VCode?t=" + Math.random());
+            })
+
+            $("input").keypress(function (e) {
+                if (e.keyCode == 13)
+                    $("a#btnlogin").click();
+            })
+
+            $("a#btnlogin").click(function () {
+                if ($("#UName").val() == "") {
+                    alert("用户名不能为空");
+                    return false;
+                }
+                if ($("#UPwd").val() == "") {
+                    alert("密码不能为空");
+                    return false;
+                }
+                if ($("#VCode").val() == "") {
+                    alert("验证码不能为空");
+                    return false;
+                }
+                var UName = $("#UName").val();
+                var UPwd = $("#UPwd").val();
+                var VCode = $("#VCode").val();
+                $.post("/Admin/Login", { UName: UName, UPwd: UPwd, VCode: VCode }, function (data) {
+                    if (data == "1") {
+                        location.href = "/Admin";
+                    }
+                    else if (data == "2")
+                    {
+                        location.href = "/Admin/Pwd/Set";
+                    }
+                    else {
+                        alert(data)
+                    }
+                })
+            })
+
+        })
+    </script>
+
+
+</body></html>
